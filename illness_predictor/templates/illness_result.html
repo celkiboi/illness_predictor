@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<h1>RESULTS: </h1>
+
+<p>
+    Your sympthoms are:
+    {% for symptom in sympthoms %}
+        <span class="symptom">{{ symptom }}</span>, 
+    {% endfor %}
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Disease</th>
+            <th>Probability (%)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for disease, probability in data.items %}
+        <tr>
+            <td>{{ disease }}</td>
+            <td class="p">{{ probability }}%</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h1><a href="/">Predict again</a></h1>
+
+<script src="{% static 'js/table.js' %}"></script>
+
+{% endblock %}

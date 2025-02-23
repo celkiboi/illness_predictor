@@ -1,0 +1,82 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+.probability {
+    text-align: center;
+    font-weight: bold;
+}
+
+.p0 { background-color: #daf5c5; color: #333; }  /* 0-5% */
+.p1 { background-color: #d6e9c6; color: #2d6a4f; }  /* 5-10% */
+.p2 { background-color: #b2dfdb; color: #00695c; }  /* 10-15% */
+.p3 { background-color: #90caf9; color: #1565c0; }  /* 15-20% */
+.p4 { background-color: #64b5f6; color: #0d47a1; }  /* 20-25% */
+.p5 { background-color: #ffeb3b; color: #f57f17; }  /* 25-30% */
+.p6 { background-color: #ffca28; color: #ff6f00; }  /* 30-35% */
+.p7 { background-color: #ff9800; color: #e65100; }  /* 35-40% */
+.p8 { background-color: #f57c00; color: #bf360c; }  /* 40-45% */
+.p9 { background-color: #d32f2f; color: #ffffff; }  /* 45%+ */
+
+/* Add some padding and margin to the form */
+form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fafafa;
+}
+
+/* Style each form element */
+form input, form select, form button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* Style the submit button with some color */
+form button {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    border: none;
+}
+
+form button:hover {
+    background-color: #45a049;
+}
+
+/* Styling for CSRF token */
+form input[type="hidden"] {
+    display: none;
+}
+
+h1 a {
+    text-decoration: none;
+    color: #4CAF50;
+    font-size: 18px;
+}
+
+h1 a:hover {
+    color: #45a049;
+}
+
+/* Add a bit of space to the bottom of the page */
+body {
+    margin-bottom: 50px;
+}
