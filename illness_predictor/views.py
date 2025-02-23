@@ -3,11 +3,11 @@ from .forms import IllnessPredictorForm
 from .utils import predict, clean_results
 from django.http import HttpResponseServerError
 
-
 def illness_predictor_view(request):
     if request.method == "POST":
         form = IllnessPredictorForm(request.POST)
         if form.is_valid():
+            # Convert selected symptoms to input format
             data = {
                 "Inputs": {
                     "input1": [
@@ -15,17 +15,35 @@ def illness_predictor_view(request):
                     ]
                 }
             }
-            results = predict(data)
 
+            # Call prediction function
+            results = predict(data)
+            # Debug the data sent to the predict function
+
+
+            # Handle prediction errors
             if results is None:
-                return HttpResponseServerError("Something went wrong") 
-            
-            sympthoms = [key.replace('_', ' ').title() for key, value in data["Inputs"]["input1"][0].items() if value == 1]
+                return HttpResponseServerError("Something went wrong")
+
+            # Extract selected symptoms
+            symptoms = [key.replace('_', ' ').title() for key, value in data["Inputs"]["input1"][0].items() if value == 1]
             results = clean_results(results)
-            print(sympthoms)
-            
-            return render(request, "illness_result.html", {"data": results, "sympthoms": sympthoms})
+
+            return render(request, "illness_result.html", {"data": results, "symptoms": symptoms})
+    
     else:
         form = IllnessPredictorForm()
-    
-    return render(request, "illness_form.html", {"form": form})
+
+    # Define symptom categories for form rendering
+    symptom_categories = {
+        "musculoskeletal": form.SYMPTOM_CATEGORIES["musculoskeletal"],
+        "gastrointestinal": form.SYMPTOM_CATEGORIES["gastrointestinal"],
+        "psychological": form.SYMPTOM_CATEGORIES["psychological"],
+        "cardiovascular": form.SYMPTOM_CATEGORIES["cardiovascular"],
+        "dermatological": form.SYMPTOM_CATEGORIES["dermatological"],
+        "liver": form.SYMPTOM_CATEGORIES["liver_related"],
+        "inflammatory": form.SYMPTOM_CATEGORIES["inflammatory"],
+        "other": form.SYMPTOM_CATEGORIES["other"],
+    }
+
+    return render(request, "illness_form.html", {"form": form, **symptom_categories})

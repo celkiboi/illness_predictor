@@ -1,10 +1,99 @@
 {% extends 'base.html' %}
+
 {% block content %}
+<div class="form-container">
+    <h2>Illness Predictor</h2>
+    <form method="post">
+        {% csrf_token %}
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Submit</button>
-</form>
+        <!-- Musculoskeletal Symptoms -->
+        <div class="category" onclick="toggleCategory('musculoskeletal')">Musculoskeletal Symptoms</div>
+        <div id="musculoskeletal" class="symptom-list">
+            <div class="symptom-grid">
+                {% for symptom in musculoskeletal %}
+                <label><input type="checkbox" name="{{ symptom.0 }}"> {{ symptom.1 }}</label>
+                {% endfor %}
+            </div>
+        </div>
 
+        <!-- Gastrointestinal and Urinary Symptoms -->
+        <div class="category" onclick="toggleCategory('gastrointestinal')">Gastrointestinal and Urinary Symptoms</div>
+        <div id="gastrointestinal" class="symptom-list">
+            <div class="symptom-grid">
+                {% for symptom in gastrointestinal %}
+                <label><input type="checkbox" name="{{ symptom.0 }}"> {{ symptom.1 }}</label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Psychological Symptoms -->
+        <div class="category" onclick="toggleCategory('psychological')">Psychological Symptoms</div>
+        <div id="psychological" class="symptom-list">
+            <div class="symptom-grid">
+                {% for symptom in psychological %}
+                <label><input type="checkbox" name="{{ symptom.0 }}"> {{ symptom.1 }}</label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Cardiovascular Symptoms -->
+        <div class="category" onclick="toggleCategory('cardiovascular')">Cardiovascular Symptoms</div>
+        <div id="cardiovascular" class="symptom-list">
+            <div class="symptom-grid">
+                {% for symptom in cardiovascular %}
+                <label><input type="checkbox" name="{{ symptom.0 }}"> {{ symptom.1 }}</label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Dermatological Symptoms -->
+        <div class="category" onclick="toggleCategory('dermatological')">Dermatological Symptoms</div>
+        <div id="dermatological" class="symptom-list">
+            <div class="symptom-grid">
+                {% for symptom in dermatological %}
+                <label><input type="checkbox" name="{{ symptom.0 }}"> {{ symptom.1 }}</label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Liver Related Symptoms -->
+        <div class="category" onclick="toggleCategory('liver')">Liver Related Symptoms</div>
+        <div id="liver" class="symptom-list">
+            <div class="symptom-grid">
+                {% for symptom in liver %}
+                <label><input type="checkbox" name="{{ symptom.0 }}"> {{ symptom.1 }}</label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Inflammatory Symptoms -->
+        <div class="category" onclick="toggleCategory('inflammatory')">Inflammatory Symptoms</div>
+        <div id="inflammatory" class="symptom-list">
+            <div class="symptom-grid">
+                {% for symptom in inflammatory %}
+                <label><input type="checkbox" name="{{ symptom.0 }}"> {{ symptom.1 }}</label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Other Symptoms -->
+        <div class="category" onclick="toggleCategory('other')">Other Symptoms</div>
+        <div id="other" class="symptom-list">
+            <div class="symptom-grid">
+                {% for symptom in other %}
+                <label><input type="checkbox" name="{{ symptom.0 }}"> {{ symptom.1 }}</label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn">Submit</button>
+    </form>
+</div>
+
+<script>
+function toggleCategory(id) {
+    var element = document.getElementById(id);
+    element.style.display = element.style.display === 'block' ? 'none' : 'block';
+}
+</script>
 {% endblock %}
