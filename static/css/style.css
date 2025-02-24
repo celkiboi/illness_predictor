@@ -32,6 +32,23 @@ body {
     flex-grow: 1;
 }
 
+@media (max-width: 768px) {
+    .form-container {
+        padding: 0;
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .form-container form {
+        margin: 10px;
+    }
+
+    .form-container div {
+        margin: 10px;
+    }
+}
+
 h2 {
     font-size: 28px;
     text-align: center;
@@ -185,13 +202,21 @@ input[type="checkbox"] {
 #disease-results {
     max-width: 800px;
     width: 100%;
-    margin: 0 auto;
+    margin: 0;
     text-align: center;
     padding: 20px;
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin-bottom: 40px;
+}
+
+@media (max-width: 768px) {
+    #disease-results {
+        padding: 0;
+        margin-left: 0;
+        margin-right: 0;
+    }
 }
 
 table {
@@ -229,6 +254,7 @@ tr:hover {
     table {
         width: 100%;
         font-size: 14px;
+        margin-left: 0;
     }
 }
 
@@ -272,7 +298,6 @@ tr:hover {
     background-color: #1565c0;
     color: white;
     text-align: center;
-    padding: 15px;
     font-size: 14px;
     width: 100%;
     position: relative;
@@ -285,10 +310,9 @@ tr:hover {
     align-items: center;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     .footer {
         font-size: 12px;
-        padding: 10px;
         width: 100%;
     }
 }
