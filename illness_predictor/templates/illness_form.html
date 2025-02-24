@@ -3,6 +3,20 @@
 {% block content %}
 <div class="form-container">
     <h2>Illness Predictor</h2>
+
+    <div class="preface">  
+        <p>Welcome to the Illness Predictor, a tool designed to provide preliminary insights based on your symptoms. This system utilizes AI-driven analysis to identify potential conditions that may match the symptoms you select. While this tool is built on medical datasets and pattern recognition, it is not a substitute for professional medical advice.</p>  
+
+        <p><strong>How to Use:</strong></p>  
+        <ul>  
+            <li>Select at least <strong>three symptoms</strong> to proceed.</li>  
+            <li>Expand each category by clicking on its name to view relevant symptoms.</li>  
+            <li>The AI will process your selections and return potential matches based on symptom patterns.</li>  
+        </ul>  
+
+        <p><strong>Disclaimer:</strong> This tool does not provide a medical diagnosis. The predictions generated are based on statistical analysis and should not be used as a replacement for consultation with a healthcare professional.</p>  
+    </div>
+    
     <form method="post">
         {% csrf_token %}
 

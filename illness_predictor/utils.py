@@ -10,7 +10,6 @@ def allowSelfSignedHttps(allowed):
 def predict(data):
     allowSelfSignedHttps(True)
     body = str.encode(json.dumps(data))
-    print("Data being sent to predict:", data)
 
     #url = 'http://1d0b4443-8610-4125-86cc-f3e226fb6c7b.westeurope.azurecontainer.io/score'
     url = 'http://746ecc41-74c6-459f-b420-df039014d97b.westeurope.azurecontainer.io/score'
