@@ -34,4 +34,23 @@ window.onload = function() {
             }
         }
     });
+
+    let diseaseLinks = document.querySelectorAll('.disease-link');
+    diseaseLinks.forEach(function(link) {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            let diseaseName = encodeURIComponent(this.getAttribute('data-disease'));
+            let searchUrl = `https://www.mayoclinic.org/search/search-results?q=${diseaseName}`;
+            window.location.href = searchUrl;
+        });
+        link.addEventListener('mousedown', function(event) {
+            if (event.button === 1) {
+                event.preventDefault();
+                console.log("Okay");
+                let diseaseName = encodeURIComponent(this.getAttribute('data-disease'));
+                let searchUrl = `https://www.mayoclinic.org/search/search-results?q=${diseaseName}`;
+                window.open(searchUrl, '_blank').focus();
+            }
+        });
+    });
 };

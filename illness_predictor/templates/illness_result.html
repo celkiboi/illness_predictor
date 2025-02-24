@@ -13,7 +13,6 @@
     </ul>
 </p>
 
-<!-- Disease Results Section -->
 <div id="disease-results">
     <h2>Top 5 Diseases</h2>
     <table>
@@ -27,7 +26,7 @@
             {% for disease, probability in data %}
                 {% if forloop.counter <= 5 %}
                     <tr>
-                        <td><a href="#" class="disease-link" data-disease="{{ disease }}">{{ disease }}</a></td>
+                        <td><a class="disease-link" data-disease="{{ disease }}">{{ disease }}</a></td>
                         <td class="p">{{ probability }}%</td>
                     </tr>
                 {% endif %}
@@ -127,17 +126,6 @@
             toggleButton.textContent = "Show All Diseases";
         }
     }
-
-    // Add click functionality for diseases
-    const diseaseLinks = document.querySelectorAll('.disease-link');
-    diseaseLinks.forEach(link => {
-        link.addEventListener('click', function(event) {
-            event.preventDefault();
-            const diseaseName = event.target.dataset.disease;
-            alert("You clicked on: " + diseaseName);
-            // You can redirect to a different page or show more details here
-        });
-    });
 </script>
 
 {% endblock %}
