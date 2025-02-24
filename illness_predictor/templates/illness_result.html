@@ -4,16 +4,19 @@
 
 <h1>RESULTS: </h1>
 
-<p>
-    <strong>Your symptoms are:</strong>
-    <ul>
-    {% for symptom in symptoms %}
-        <li><span class="symptom">{{ symptom }}</span></li>
-    {% endfor %}
-    </ul>
-</p>
-
 <div id="disease-results">
+    <p>
+        <strong>Your symptoms are:</strong>
+        <table class="symptom-table">
+            <tbody>
+                {% for symptom in symptoms %}
+                    <tr>
+                        <td><span class="symptom">{{ symptom }}</span></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </p>
     <h2>Top 5 Diseases</h2>
     <table>
         <thead>
@@ -62,14 +65,12 @@
     </div>
 </div>
 
-<!-- Predict Again Button -->
 <div id="predict-again" style="text-align: center; width: 100%; margin-bottom: 20px;">
     <button class="predict-btn" onclick="window.location.href='/'">Predict again</button>
 </div>
 
 <script src="{% static 'js/table.js' %}"></script>
 <script>
-    // Prepare data for pie chart (Top 5 Diseases)
     const dataForChart = [
         {% for disease, probability in data %}
             {% if forloop.counter <= 5 %}
@@ -81,11 +82,9 @@
         {% endfor %}
     ];
 
-    // Extract labels and values for the pie chart
     const labels = dataForChart.map(item => item.label);
     const values = dataForChart.map(item => item.value*100);
 
-    // Create Pie Chart
     const ctx = document.getElementById('disease-pie-chart').getContext('2d');
     const pieChart = new Chart(ctx, {
         type: 'pie',
@@ -113,7 +112,6 @@
         }
     });
 
-    // Toggle the "Show All Diseases" button
     function toggleExpand() {
         const allDiseases = document.getElementById('all-diseases');
         const toggleButton = document.getElementById('toggle-all');

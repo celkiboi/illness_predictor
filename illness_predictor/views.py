@@ -7,7 +7,6 @@ def illness_predictor_view(request):
     if request.method == "POST":
         form = IllnessPredictorForm(request.POST)
         if form.is_valid():
-            # Convert selected symptoms to input format
             data = {
                 "Inputs": {
                     "input1": [
@@ -16,18 +15,14 @@ def illness_predictor_view(request):
                 }
             }
 
-            # Call prediction function
             results = predict(data)
 
-            # Handle prediction errors
             if results is None:
                 return HttpResponseServerError("Something went wrong")
 
-            # Extract selected symptoms
             symptoms = [key.replace('_', ' ').title() for key, value in data["Inputs"]["input1"][0].items() if value == 1]
             results = clean_results(results)
 
-            # Sort the diseases by probability in descending order
             sorted_results = sorted(results.items(), key=lambda x: x[1], reverse=True)
 
             return render(request, "illness_result.html", {"data": sorted_results, "symptoms": symptoms})
@@ -35,7 +30,6 @@ def illness_predictor_view(request):
     else:
         form = IllnessPredictorForm()
 
-    # Define symptom categories for form rendering
     symptom_categories = {
         "musculoskeletal": form.SYMPTOM_CATEGORIES["musculoskeletal"],
         "gastrointestinal": form.SYMPTOM_CATEGORIES["gastrointestinal"],
