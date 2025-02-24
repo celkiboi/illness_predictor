@@ -20,7 +20,7 @@ def illness_predictor_view(request):
             if results is None:
                 return HttpResponseServerError("Something went wrong")
 
-            symptoms = [key.replace('_', ' ').title() for key, value in data["Inputs"]["input1"][0].items() if value == 1]
+            symptoms = [key.replace('_', ' ').replace('1','').title() for key, value in data["Inputs"]["input1"][0].items() if value == 1]
             results = clean_results(results)
 
             sorted_results = sorted(results.items(), key=lambda x: x[1], reverse=True)
