@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-e+&*02xr(j2mi7x%g+-vgtjk_tump1!ml#fnwr8fpb=w4@p+7%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['illness-predictor.azurewebsites.net', '127.0.0.1']
+ALLOWED_HOSTS = ['illness-predictor.azurewebsites.net', '127.0.0.1', '192.168.178.20']
 
 
 # Application definition
