@@ -44,25 +44,96 @@ h2 {
 
 /* Symptom Categories */
 .category {
-    background-color: #e3f2fd;
     padding: 10px;
     border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
     margin-top: 10px;
-    color: #1565c0;
+    color: white; /* Changed text color to white */
 }
 
 .category:hover {
-    background-color: #bbfbc5;
+    opacity: 0.85;
+}
+
+/* Assign darker colors to each symptom group */
+.category-musculoskeletal {
+    background-color: #64B5F6; /* Medium Blue */
+}
+
+.category-gastrointestinal {
+    background-color: #81C784; /* Medium Green */
+}
+
+.category-psychological {
+    background-color: #BA68C8; /* Medium Purple */
+}
+
+.category-cardiovascular {
+    background-color: #FFD54F; /* Medium Amber */
+}
+
+.category-dermatological {
+    background-color: #F06292; /* Medium Pink */
+}
+
+.category-liver {
+    background-color: #FFB74D; /* Medium Orange */
+}
+
+.category-inflammatory {
+    background-color: #4DB6AC; /* Medium Teal */
+}
+
+.category-other {
+    background-color: #A1887F; /* Medium Brown */
+}
+
+/* Hover effect matching the category color */
+.category-musculoskeletal:hover,
+#musculoskeletal {
+    background-color: #64B5F6;
+}
+
+.category-gastrointestinal:hover,
+#gastrointestinal {
+    background-color: #81C784;
+}
+
+.category-psychological:hover,
+#psychological {
+    background-color: #BA68C8;
+}
+
+.category-cardiovascular:hover,
+#cardiovascular {
+    background-color: #FFD54F;
+}
+
+.category-dermatological:hover,
+#dermatological {
+    background-color: #F06292;
+}
+
+.category-liver:hover,
+#liver {
+    background-color: #FFB74D;
+}
+
+.category-inflammatory:hover,
+#inflammatory {
+    background-color: #4DB6AC;
+}
+
+.category-other:hover,
+#other {
+    background-color: #A1887F;
 }
 
 /* Collapsible sections */
 .symptom-list {
     display: none;
     padding: 10px;
-    background-color: white;
-    border-left: 4px solid #1565c0;
     margin-bottom: 10px;
 }
 
@@ -174,7 +245,6 @@ tr:hover {
         font-size: 14px;
     }
 }
-
 
 .predict-btn {
     background-color: #e90c0c;
