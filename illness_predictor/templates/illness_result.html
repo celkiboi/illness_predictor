@@ -5,31 +5,139 @@
 <h1>RESULTS: </h1>
 
 <p>
-    Your sympthoms are:
-    {% for symptom in sympthoms %}
-        <span class="symptom">{{ symptom }}</span>, 
+    <strong>Your symptoms are:</strong>
+    <ul>
+    {% for symptom in symptoms %}
+        <li><span class="symptom">{{ symptom }}</span></li>
     {% endfor %}
+    </ul>
 </p>
 
-<table>
-    <thead>
-        <tr>
-            <th>Disease</th>
-            <th>Probability (%)</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for disease, probability in data.items %}
-        <tr>
-            <td>{{ disease }}</td>
-            <td class="p">{{ probability }}%</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<!-- Disease Results Section -->
+<div id="disease-results">
+    <h2>Top 5 Diseases</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Disease</th>
+                <th>Probability (%)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for disease, probability in data %}
+                {% if forloop.counter <= 5 %}
+                    <tr>
+                        <td><a href="#" class="disease-link" data-disease="{{ disease }}">{{ disease }}</a></td>
+                        <td class="p">{{ probability }}%</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
 
-<h1><a href="/">Predict again</a></h1>
+    <h2>Top 5 Diseases Pie Chart</h2>
+    <div style="width: 60%; margin: 0 auto;">
+        <canvas id="disease-pie-chart"></canvas>
+    </div>
+    
+    <button id="toggle-all" onclick="toggleExpand()">Show All Diseases</button>
+
+    <div id="all-diseases" style="display: none;">
+        <h2>All Diseases</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Disease</th>
+                    <th>Probability (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for disease, probability in data %}
+                    <tr>
+                        <td><a href="#" class="disease-link" data-disease="{{ disease }}">{{ disease }}</a></td>
+                        <td class="p">{{ probability }}%</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Predict Again Button -->
+<div id="predict-again" style="text-align: center; width: 100%; margin-bottom: 20px;">
+    <button class="predict-btn" onclick="window.location.href='/'">Predict again</button>
+</div>
 
 <script src="{% static 'js/table.js' %}"></script>
+<script>
+    // Prepare data for pie chart (Top 5 Diseases)
+    const dataForChart = [
+        {% for disease, probability in data %}
+            {% if forloop.counter <= 5 %}
+                {
+                    label: "{{ disease }}",
+                    value: {{ probability }}
+                },
+            {% endif %}
+        {% endfor %}
+    ];
+
+    // Extract labels and values for the pie chart
+    const labels = dataForChart.map(item => item.label);
+    const values = dataForChart.map(item => item.value*100);
+
+    // Create Pie Chart
+    const ctx = document.getElementById('disease-pie-chart').getContext('2d');
+    const pieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: values,
+                backgroundColor: ['#FF5733', '#FF8D1A', '#FFEC3D', '#38B9E9', '#8D1AFF'],
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.label + ': ' + tooltipItem.raw + '%';
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Toggle the "Show All Diseases" button
+    function toggleExpand() {
+        const allDiseases = document.getElementById('all-diseases');
+        const toggleButton = document.getElementById('toggle-all');
+        
+        if (allDiseases.style.display === "none") {
+            allDiseases.style.display = "block";
+            toggleButton.textContent = "Show Top 3 Diseases";
+        } else {
+            allDiseases.style.display = "none";
+            toggleButton.textContent = "Show All Diseases";
+        }
+    }
+
+    // Add click functionality for diseases
+    const diseaseLinks = document.querySelectorAll('.disease-link');
+    diseaseLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            const diseaseName = event.target.dataset.disease;
+            alert("You clicked on: " + diseaseName);
+            // You can redirect to a different page or show more details here
+        });
+    });
+</script>
 
 {% endblock %}

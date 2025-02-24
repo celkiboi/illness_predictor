@@ -18,8 +18,6 @@ def illness_predictor_view(request):
 
             # Call prediction function
             results = predict(data)
-            # Debug the data sent to the predict function
-
 
             # Handle prediction errors
             if results is None:
@@ -29,7 +27,10 @@ def illness_predictor_view(request):
             symptoms = [key.replace('_', ' ').title() for key, value in data["Inputs"]["input1"][0].items() if value == 1]
             results = clean_results(results)
 
-            return render(request, "illness_result.html", {"data": results, "symptoms": symptoms})
+            # Sort the diseases by probability in descending order
+            sorted_results = sorted(results.items(), key=lambda x: x[1], reverse=True)
+
+            return render(request, "illness_result.html", {"data": sorted_results, "symptoms": symptoms})
     
     else:
         form = IllnessPredictorForm()
