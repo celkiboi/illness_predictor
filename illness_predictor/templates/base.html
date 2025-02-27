@@ -1,22 +1,48 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Illness predictor</title>
-
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Illness Predictor</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+  <!-- Navbar -->
+  <header>
+    <nav class="navbar">
+      <div class="container">
+        <div class="navbar-logo">
+          <a href="{% url 'home' %}">Illness Predictor</a>
+        </div>
+        <div class="navbar-links">
+          {% if user.is_authenticated %}
+            <span class="navbar-name">Hi, {{ user.username }}!</span>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'illness_predictor' %}">Predict</a>
+            <a href="{% url 'search' %}">Search</a>
+            <a href="{% url 'my_predictions' %}">My Predictions</a>
+            <a href="{% url 'logout' %}">Logout</a>
+          {% else %}
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'register' %}">Register</a>
+            <a href="{% url 'login' %}">Login</a>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main content -->
+  <div class="content">
     {% block content %}
     {% endblock %}
-    
-    <footer class="footer">
-        <p>&copy; 2025 Illness Predictor. All rights reserved.</p>
-    </footer>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2025 Illness Predictor. All rights reserved.</p>
+  </footer>
 </body>
 </html>

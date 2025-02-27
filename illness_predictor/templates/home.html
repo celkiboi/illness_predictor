@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>To use application, You have to log in first!</h1>
+
+<h2><a href="{% url 'register' %}">Register</a></h2>
+<h2><a href="{% url 'login' %}">Login</a></h2>
+{% endblock %}

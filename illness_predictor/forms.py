@@ -1,4 +1,6 @@
 from django import forms
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 
 class IllnessPredictorForm(forms.Form):
     SYMPTOM_CATEGORIES = {
@@ -117,3 +119,10 @@ class IllnessPredictorForm(forms.Form):
         if selected_symptoms < 3:
             raise forms.ValidationError('Please select at least 3 symptoms.')
         return cleaned_data
+
+class RegistrationForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+
+    class Meta:
+        model = User
+        fields = ["username", "email", "password1", "password2"]
