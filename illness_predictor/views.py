@@ -18,7 +18,11 @@ from .serializers import IllnessPredictionSerializer
 from .utils import predict, clean_results
 
 def home(request):
-    return render(request, "home.html")
+    if not request.user.is_authenticated:
+        return render(request, "home.html")
+    else:
+        return redirect("illness_predictor")
+        
 
 def register(request):
     if request.method == "POST":
@@ -154,7 +158,8 @@ class GetPatientsByDisease(APIView):
                 filtered_patients.append({
                     'username': patient.user.username if patient.user else None,
                     'email': patient.user.email if patient.user else None,
-                    'prediction_id': patient.id
+                    'prediction_id': patient.id,
+                    'highest_prediction': highest_prediction,
                 })
 
         if not filtered_patients:
@@ -180,9 +185,9 @@ class GetSymptomsByDisease(APIView):
             highest_prediction = max(patient.predictions, key=lambda x: x[1], default=None)
 
             if highest_prediction and highest_prediction[0].lower() in diseases:
-                symptoms_data = patient.symptoms  # Remove extra number key
+                symptoms_data = patient.symptoms
                 prediction_id = patient.id
-                break  # Return the first matching patient's symptoms
+                break
 
         if symptoms_data is None:
             return JsonResponse({"error": "No matching diseases found"}, status=404)
@@ -210,7 +215,6 @@ class GetDiseasesBySymptoms(APIView):
         query_params = request.GET
         converted_params = {}
 
-        # Convert query parameters (true/false) into integers
         for symptom, value in query_params.items():
             if not value:
                 continue
@@ -241,7 +245,7 @@ class GetPredictionById(APIView):
         prediction = get_object_or_404(IllnessPrediction, id=prediction_id)
         sorted_results = sorted(prediction.predictions, key=lambda x: x[1], reverse=True)
         
-        symptoms = prediction.symptoms  # Return symptoms as a dictionary directly
+        symptoms = prediction.symptoms
 
         return Response({
             "data": sorted_results,

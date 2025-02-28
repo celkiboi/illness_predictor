@@ -1,3 +1,4 @@
+
 html, body {
     font-family: Arial, sans-serif;
     background-color: #f4f7fa;
@@ -6,22 +7,17 @@ html, body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f7fa;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
+  }
+  
+  body {
     justify-content: flex-start;
-    align-items: center;
+    align-items: stretch; 
     height: 100vh;
     padding-top: 20px;
-}
+  }
+  
 
-.form-container {
+  .form-container {
     background-color: white;
     width: 90%;
     max-width: 1200px;
@@ -30,136 +26,223 @@ body {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     margin: 20px auto;
     flex-grow: 1;
-}
-
-@media (max-width: 768px) {
+    align-self: center;
+    text-align: center;
+  }
+  
+  @media (max-width: 768px) {
     .form-container {
-        padding: 0;
-        width: 100%;
-        margin-left: 0;
-        margin-right: 0;
+      padding: 0;
+      width: 100%;
+      margin-left: 0;
+      margin-right: 0;
     }
-
+    
     .form-container form {
-        margin: 10px;
+      margin: 10px;
     }
-
+    
     .form-container div {
-        margin: 10px;
+      margin: 10px;
     }
-}
+  }
+  
+  .center-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 40px);
+  }
+  
+  .form-container form input[type="text"],
+  .form-container form input[type="password"],
+  .form-container form input[type="email"] {
+    display: block;
+    margin: 10px auto;
+    text-align: center;
+    padding: 10px;
+    width: 80%;
+    max-width: 400px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
 
-h2 {
+  .form-container form button.submit-btn {
+    display: block;
+    margin: 20px auto;
+  }
+  
+
+  .navbar {
+    background: linear-gradient(135deg, #1565c0, #64b5f6);
+    padding: 10px 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  
+  .navbar-logo a {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+  }
+  
+  .navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .navbar-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .navbar-links a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  .navbar-links a.active {
+    background-color: #ffca28;
+    color: #1565c0;
+    font-weight: bold;
+  }
+  
+  .navbar-name {
+    color: white;
+    font-size: 16px;
+    margin-right: 20px;
+  }
+  
+  h2 {
     font-size: 28px;
     text-align: center;
     color: #333;
     margin-bottom: 20px;
-}
-
-.category {
+  }
+  
+  .category {
     padding: 10px;
     border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
     margin-top: 10px;
     color: white;
-}
-
-.category:hover {
+  }
+  
+  .category:hover {
     opacity: 0.85;
-}
-
-.category-musculoskeletal {
+  }
+  
+  .category-musculoskeletal {
     background-color: #64B5F6;
-}
-
-.category-gastrointestinal {
+  }
+  
+  .category-gastrointestinal {
     background-color: #81C784;
-}
-
-.category-psychological {
+  }
+  
+  .category-psychological {
     background-color: #BA68C8;
-}
-
-.category-cardiovascular {
+  }
+  
+  .category-cardiovascular {
     background-color: #FFD54F;
-}
-
-.category-dermatological {
+  }
+  
+  .category-dermatological {
     background-color: #F06292;
-}
-
-.category-liver {
+  }
+  
+  .category-liver {
     background-color: #FFB74D;
-}
-
-.category-inflammatory {
+  }
+  
+  .category-inflammatory {
     background-color: #4DB6AC;
-}
-
-.category-other {
+  }
+  
+  .category-other {
     background-color: #A1887F;
-}
-
-.category-musculoskeletal:hover,
-#musculoskeletal {
+  }
+  
+  .category-musculoskeletal:hover,
+  #musculoskeletal {
     background-color: #64B5F6;
-}
-
-.category-gastrointestinal:hover,
-#gastrointestinal {
+  }
+  
+  .category-gastrointestinal:hover,
+  #gastrointestinal {
     background-color: #81C784;
-}
-
-.category-psychological:hover,
-#psychological {
+  }
+  
+  .category-psychological:hover,
+  #psychological {
     background-color: #BA68C8;
-}
-
-.category-cardiovascular:hover,
-#cardiovascular {
+  }
+  
+  .category-cardiovascular:hover,
+  #cardiovascular {
     background-color: #FFD54F;
-}
-
-.category-dermatological:hover,
-#dermatological {
+  }
+  
+  .category-dermatological:hover,
+  #dermatological {
     background-color: #F06292;
-}
-
-.category-liver:hover,
-#liver {
+  }
+  
+  .category-liver:hover,
+  #liver {
     background-color: #FFB74D;
-}
-
-.category-inflammatory:hover,
-#inflammatory {
+  }
+  
+  .category-inflammatory:hover,
+  #inflammatory {
     background-color: #4DB6AC;
-}
-
-.category-other:hover,
-#other {
+  }
+  
+  .category-other:hover,
+  #other {
     background-color: #A1887F;
-}
-
-.symptom-list {
+  }
+  
+  .symptom-list {
     display: none;
     padding: 10px;
     margin-bottom: 10px;
     margin-top: -5px;
-}
-
-.symptom-grid {
+  }
+  
+  .symptom-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 10px;
-}
-
-input[type="checkbox"] {
+  }
+  
+  input[type="checkbox"] {
     margin-right: 8px;
     transform: scale(1.2);
-}
-
-.submit-btn {
+  }
+  
+  .submit-btn {
     background-color: #4CAF50;
     color: white;
     font-size: 20px;
@@ -170,19 +253,19 @@ input[type="checkbox"] {
     padding: 15px;
     width: 100%;
     margin-top: 20px;
-}
-
-.submit-btn:hover {
+  }
+  
+  .submit-btn:hover {
     background-color: #45a049;
-}
-
-@media (max-width: 768px) {
+  }
+  
+  @media (max-width: 768px) {
     .symptom-grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     }
-}
-
-#toggle-all {
+  }
+  
+  #toggle-all {
     background-color: #2196F3;
     color: white;
     padding: 10px 15px;
@@ -194,72 +277,63 @@ input[type="checkbox"] {
     display: block;
     margin-left: auto;
     margin-right: auto;
-}
-
-#toggle-all:hover {
+  }
+  
+  #toggle-all:hover {
     background-color: #0b79d0;
-}
-
-#disease-results {
+  }
+  
+  #disease-results {
     max-width: 800px;
     width: 100%;
-    margin: 0;
+    margin: 20px auto 40px;
     text-align: center;
     padding: 20px;
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 40px;
-}
-
-@media (max-width: 768px) {
-    #disease-results {
-        padding: 0;
-        margin-left: 0;
-        margin-right: 0;
-    }
-}
-
-table {
+  }
+  
+  table {
     width: 80%;
     margin: 0 auto;
     border-collapse: collapse;
     margin-top: 20px;
-}
-
-th, td {
+  }
+  
+  th, td {
     padding: 12px 15px;
     text-align: left;
     border: 1px solid #ddd;
-}
-
-th {
+  }
+  
+  th {
     background-color: #f2f2f2;
     font-weight: bold;
-}
-
-tr:hover {
+  }
+  
+  tr:hover {
     background-color: #f5f5f5;
-}
-
-#disease-results h2 {
+  }
+  
+  #disease-results h2 {
     text-align: center;
     margin-bottom: 20px;
-}
-
-#disease-results button {
+  }
+  
+  #disease-results button {
     width: auto;
-}
-
-@media (max-width: 768px) {
+  }
+  
+  @media (max-width: 768px) {
     table {
-        width: 100%;
-        font-size: 14px;
-        margin-left: 0;
+      width: 100%;
+      font-size: 14px;
+      margin-left: 0;
     }
-}
-
-.predict-btn {
+  }
+  
+  .predict-btn {
     background-color: #e90c0c;
     color: white;
     font-size: 20px;
@@ -270,68 +344,113 @@ tr:hover {
     padding: 15px;
     margin-top: 20px;
     align-self: center;
-}
-
-.disease-link {
+  }
+  
+  .disease-link {
     color: #3388FF;
     text-decoration: none;
     font-weight: bold;
     cursor: pointer;
-}
-
-.disease-link:hover {
+  }
+  
+  .disease-link:hover {
     text-decoration: underline;
-}
-
-#disease-results h2 {
+  }
+  
+  #disease-results h2 {
     text-align: center;
     font-size: 24px;
     margin-top: 20px;
     color: #333;
-}
-
-#disease-pie-chart {
+  }
+  
+  #disease-pie-chart {
     max-width: 600px;
     margin: 0 auto;
-}
-
-.footer {
+  }
+  
+  .footer {
     background-color: #1565c0;
     color: white;
     text-align: center;
     font-size: 14px;
     width: 100%;
     position: relative;
-}
-
-#content {
+  }
+  
+  @media (max-width: 768px) {
+    .footer {
+      font-size: 12px;
+      width: 100%;
+    }
+  }
+  
+  #content {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-@media (max-width: 768px) {
-    .footer {
-        font-size: 12px;
-        width: 100%;
-    }
-}
-
-.symptom-table {
+  }
+  
+  .symptom-table {
     width: 40%;
     margin: 0 auto;
     border-collapse: collapse;
-}
-
-.symptom-table th, .symptom-table td {
+  }
+  
+  .symptom-table th,
+  .symptom-table td {
     padding: 10px 15px;
     text-align: center;
     border: 1px solid #a3a3a3;
-}
-
-.symptom-table th {
+  }
+  
+  .symptom-table th {
     background-color: #f2f2f2;
     font-weight: bold;
-}
-
+  }
+  
+  .home-container {
+    background-color: white;
+    width: 90%;
+    max-width: 600px;
+    margin: 80px auto;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+  
+  .home-container h1 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .home-container p {
+    font-size: 18px;
+    margin-bottom: 30px;
+    color: #666;
+  }
+  
+  .button-group {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .btn {
+    display: inline-block;
+    background-color: #1565c0;
+    color: white;
+    padding: 12px 24px;
+    font-size: 18px;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn:hover {
+    background-color: #64b5f6;
+  }
+  

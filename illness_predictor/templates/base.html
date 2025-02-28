@@ -14,20 +14,20 @@
     <nav class="navbar">
       <div class="container">
         <div class="navbar-logo">
-          <a href="{% url 'home' %}">Illness Predictor</a>
+          <a href="{% url 'home' %}" class="{% if request.path == '/' %}active{% endif %}">Illness Predictor</a>
         </div>
         <div class="navbar-links">
           {% if user.is_authenticated %}
             <span class="navbar-name">Hi, {{ user.username }}!</span>
-            <a href="{% url 'home' %}">Home</a>
-            <a href="{% url 'illness_predictor' %}">Predict</a>
-            <a href="">Search</a>
-            <a href="">My Predictions</a>
-            <a href="{% url 'logout' %}">Logout</a>
+            <a href="{% url 'illness_predictor' %}" class="{% if request.path == '/predict/' %}active{% endif %}">Predict</a>
+            {% if user.is_superuser %}
+              <a href="{% url 'admin:index' %}" class="{% if request.path == '/admin/' %}active{% endif %}">Admin dashboard</a>
+          {% endif %}
+            <a href="{% url 'logout' %}" class="{% if request.path == '/logout/' %}active{% endif %}">Logout</a>
           {% else %}
-            <a href="{% url 'home' %}">Home</a>
-            <a href="{% url 'register' %}">Register</a>
-            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'home' %}" class="{% if request.path == '/' %}active{% endif %}">Home</a>
+            <a href="{% url 'register' %}" class="{% if request.path == '/register/' %}active{% endif %}">Register</a>
+            <a href="{% url 'login' %}" class="{% if request.path == '/login/' %}active{% endif %}">Login</a>
           {% endif %}
         </div>
       </div>

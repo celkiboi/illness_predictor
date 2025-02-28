@@ -1,8 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>To use application, You have to log in first!</h1>
-
-<h2><a href="{% url 'register' %}">Register</a></h2>
-<h2><a href="{% url 'login' %}">Login</a></h2>
+<div class="home-container">
+  <h1>Welcome!</h1>
+  <p>To use the application, you have to log in first!</p>
+  <div class="button-group">
+    <a href="{% url 'register' %}" class="btn">Register</a>
+    <a href="{% url 'login' %}" class="btn">Login</a>
+  </div>
+</div>
 {% endblock %}
