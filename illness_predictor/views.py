@@ -173,14 +173,25 @@ class GetSymptomsByDisease(APIView):
         diseases = [d.lower() for d in diseases]
         all_patients = IllnessPrediction.objects.all()
 
-        symptoms_data = {}
+        symptoms_data = None
+        prediction_id = None
+
         for patient in all_patients:
             highest_prediction = max(patient.predictions, key=lambda x: x[1], default=None)
 
             if highest_prediction and highest_prediction[0].lower() in diseases:
-                symptoms_data[patient.id] = patient.symptoms
+                symptoms_data = patient.symptoms  # Remove extra number key
+                prediction_id = patient.id
+                break  # Return the first matching patient's symptoms
 
-        return Response({'symptoms': symptoms_data}, status=status.HTTP_200_OK)
+        if symptoms_data is None:
+            return JsonResponse({"error": "No matching diseases found"}, status=404)
+
+        return Response({
+            "prediction_id": prediction_id,
+            "symptoms": symptoms_data
+        }, status=status.HTTP_200_OK)
+
 
 
 class GetSymptomsByPredictionId(APIView):
@@ -199,6 +210,7 @@ class GetDiseasesBySymptoms(APIView):
         query_params = request.GET
         converted_params = {}
 
+        # Convert query parameters (true/false) into integers
         for symptom, value in query_params.items():
             if not value:
                 continue
@@ -216,12 +228,10 @@ class GetDiseasesBySymptoms(APIView):
             match = all(patient.symptoms.get(symptom) == value for symptom, value in converted_params.items())
 
             if match:
-                top_disease = max(patient.predictions, key=lambda x: x[1], default=None)
-                if top_disease:
-                    diseases_list.append({
-                        "prediction_id": patient.id,
-                        "disease": top_disease[0]
-                    })
+                diseases_list.append({
+                    "prediction_id": patient.id,
+                    "diseases": patient.predictions
+                })
 
         return Response({'diseases': diseases_list}, status=status.HTTP_200_OK)
 
@@ -230,9 +240,14 @@ class GetPredictionById(APIView):
     def get(self, request, prediction_id, *args, **kwargs):
         prediction = get_object_or_404(IllnessPrediction, id=prediction_id)
         sorted_results = sorted(prediction.predictions, key=lambda x: x[1], reverse=True)
-        symptoms = [symptom for symptom, value in prediction.symptoms.items() if value == 1]
+        
+        symptoms = prediction.symptoms  # Return symptoms as a dictionary directly
 
-        return Response({"data": sorted_results, "symptoms": symptoms}, status=status.HTTP_200_OK)
+        return Response({
+            "data": sorted_results,
+            "symptoms": symptoms
+        }, status=status.HTTP_200_OK)
+
 
 
 class GetDiseasesByPredictionId(APIView):
@@ -240,8 +255,7 @@ class GetDiseasesByPredictionId(APIView):
         prediction_id = request.GET.get('id')
         try:
             prediction = IllnessPrediction.objects.get(id=prediction_id)
-            top_disease = max(prediction.predictions, key=lambda x: x[1], default=None)
         except IllnessPrediction.DoesNotExist:
             return JsonResponse({"error": "Prediction ID not found"}, status=404)
 
-        return Response({'disease': [top_disease]}, status=status.HTTP_200_OK)
+        return Response({'diseases': [prediction.predictions]}, status=status.HTTP_200_OK)
