@@ -240,7 +240,7 @@ def get_prediction_by_id(request, prediction_id):
         sorted_results = sorted(prediction.predictions, key=lambda x: x[1], reverse=True)
         symptoms = [symptom for symptom, value in prediction.symptoms.items() if value == 1]
 
-        return render(request, "illness_result.html", {"data": sorted_results, "symptoms": symptoms})
+        return JsonResponse({"data": sorted_results, "symptoms": symptoms})
     else:
         return JsonResponse({"error": "Wrong ID"}, status=404)
 
