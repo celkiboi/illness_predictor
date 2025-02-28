@@ -8,6 +8,14 @@ from django.http import HttpResponseServerError
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from illness_predictor.models import IllnessPrediction
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from .models import IllnessPrediction
+from .serializers import IllnessPredictionSerializer
+from .utils import predict, clean_results
 
 def home(request):
     return render(request, "home.html")
@@ -92,164 +100,148 @@ def illness_predictor_view(request):
     return render(request, "illness_form.html", {"form": form, **symptom_categories})
 
 
-def get_patients_by_symptoms(request):
-    # Get all query parameters from the URL (the key-value pairs will represent symptom names and their values)
-    query_params = request.GET
+class GetPatientsBySymptoms(APIView):
+    def get(self, request, *args, **kwargs):
+        query_params = request.GET
+        converted_params = {}
 
-    # Map 'true' -> 1 and 'false' -> 0
-    converted_params = {}
-    for symptom, value in query_params.items():
-        if value.lower() == "true":
-            converted_params[symptom] = 1
-        elif value.lower() == "false":
-            converted_params[symptom] = 0
-        else:
-            # Return error if value isn't "true" or "false"
-            return JsonResponse({"error": "Invalid value for symptom, expected true or false"}, status=400)
+        for symptom, value in query_params.items():
+            if value.lower() == "true":
+                converted_params[symptom] = 1
+            elif value.lower() == "false":
+                converted_params[symptom] = 0
+            else:
+                return JsonResponse({"error": "Invalid value for symptom, expected true or false"}, status=400)
 
-    # Get all IllnessPrediction entries
-    all_patients = IllnessPrediction.objects.all()
+        all_patients = IllnessPrediction.objects.all()
+        filtered_patients = []
 
-    # Filter the patients in Python
-    filtered_patients = []
-    for patient in all_patients:
-        match = True
-        for symptom, value in converted_params.items():
-            # Check if the symptom exists in the patient's data and if it matches the value
-            if symptom not in patient.symptoms or patient.symptoms[symptom] != value:
-                match = False
-                break
-        
-        # If the patient matches all conditions, add to the result list
-        if match:
-            filtered_patients.append({
-                'username': patient.user.username if patient.user else None,
-                'email': patient.user.email if patient.user else None,
-                'prediction_id': patient.id
-            })
+        for patient in all_patients:
+            match = True
+            for symptom, value in converted_params.items():
+                if symptom not in patient.symptoms or patient.symptoms[symptom] != value:
+                    match = False
+                    break
 
-    # Return the response in JSON format
-    return JsonResponse({'patients': filtered_patients})
-
-def get_patients_by_disease(request):
-    # Get 'disease' parameters from the URL query (support multiple diseases)
-    diseases = request.GET.getlist('disease')
-
-    if not diseases:
-        return JsonResponse({"error": "Please enter at least one disease name"}, status=400)
-
-    # Normalize disease names (convert to lowercase for case-insensitive comparison)
-    diseases = [disease.lower() for disease in diseases]
-
-    all_patients = IllnessPrediction.objects.all()
-
-    filtered_patients = []
-
-    for patient in all_patients:
-        predictions = patient.predictions
-
-        if not predictions:
-            continue
-
-        highest_prediction = max(predictions, key=lambda x: x[1])  # ('disease_name', probability)
-
-        if highest_prediction[0].lower() in diseases:
-            filtered_patients.append({
-                'username': patient.user.username if patient.user else None,
-                'email': patient.user.email if patient.user else None,
-                'prediction_id': patient.id
-            })
-
-    if not filtered_patients:
-        return JsonResponse({"error": f"No patients with highest probability matching: {', '.join(diseases)}"}, status=404)
-
-    return JsonResponse({'patients': filtered_patients})
-
-def get_symptoms_by_disease(request):
-    diseases = request.GET.getlist('disease')
-
-    if not diseases:
-        return JsonResponse({"error": "Please enter at least one disease name"}, status=400)
-
-    diseases = [d.lower() for d in diseases]
-    all_patients = IllnessPrediction.objects.all()
-
-    symptoms_data = {}
-
-    for patient in all_patients:
-        highest_prediction = max(patient.predictions, key=lambda x: x[1], default=None)
-
-        if highest_prediction and highest_prediction[0].lower() in diseases:
-            symptoms_data[patient.id] = patient.symptoms
-
-    return JsonResponse({'symptoms': symptoms_data})
-
-
-def get_symptoms_by_prediction_id(request):
-    prediction_id = request.GET.get('id')
-
-    try:
-        prediction = IllnessPrediction.objects.get(id=prediction_id)
-    except IllnessPrediction.DoesNotExist:
-        return JsonResponse({"error": "Prediction ID not found"}, status=404)
-
-    return JsonResponse({'symptoms': prediction.symptoms})
-
-
-def get_diseases_by_symptoms(request):
-    query_params = request.GET
-
-    converted_params = {}
-    for symptom, value in query_params.items():
-        if not value:
-            continue
-        if value.lower() == "true":
-            converted_params[symptom] = 1
-        elif value.lower() == "false":
-            converted_params[symptom] = 0
-        else:
-            return JsonResponse({"error": f"Invalid value for symptom '{symptom}', expected true or false"}, status=400)
-
-    all_patients = IllnessPrediction.objects.all()
-    diseases_list = []
-
-    for patient in all_patients:
-        match = all(patient.symptoms.get(symptom) == value for symptom, value in converted_params.items())
-
-        if match:
-            top_disease = max(patient.predictions, key=lambda x: x[1], default=None)
-            if top_disease:
-                diseases_list.append({
-                    "prediction_id": patient.id,
-                    "disease": top_disease[0]
+            if match:
+                filtered_patients.append({
+                    'username': patient.user.username if patient.user else None,
+                    'email': patient.user.email if patient.user else None,
+                    'prediction_id': patient.id
                 })
 
-    return JsonResponse({'diseases': diseases_list})
+        return Response({'patients': filtered_patients}, status=status.HTTP_200_OK)
 
 
+class GetPatientsByDisease(APIView):
+    def get(self, request, *args, **kwargs):
+        diseases = request.GET.getlist('disease')
+        if not diseases:
+            return JsonResponse({"error": "Please enter at least one disease name"}, status=400)
 
-@login_required
-def get_prediction_by_id(request, prediction_id):
-    prediction = get_object_or_404(IllnessPrediction, id=prediction_id)
-    
-    if request.user.id == prediction.user.id:
-        print(request.user.username)
-        # Make sure the variable 'req' is correctly defined
-        print(request)
-        
+        diseases = [disease.lower() for disease in diseases]
+        all_patients = IllnessPrediction.objects.all()
+        filtered_patients = []
+
+        for patient in all_patients:
+            predictions = patient.predictions
+            if not predictions:
+                continue
+
+            highest_prediction = max(predictions, key=lambda x: x[1])
+
+            if highest_prediction[0].lower() in diseases:
+                filtered_patients.append({
+                    'username': patient.user.username if patient.user else None,
+                    'email': patient.user.email if patient.user else None,
+                    'prediction_id': patient.id
+                })
+
+        if not filtered_patients:
+            return JsonResponse({"error": f"No patients with highest probability matching: {', '.join(diseases)}"}, status=404)
+
+        return Response({'patients': filtered_patients}, status=status.HTTP_200_OK)
+
+
+class GetSymptomsByDisease(APIView):
+    def get(self, request, *args, **kwargs):
+        diseases = request.GET.getlist('disease')
+
+        if not diseases:
+            return JsonResponse({"error": "Please enter at least one disease name"}, status=400)
+
+        diseases = [d.lower() for d in diseases]
+        all_patients = IllnessPrediction.objects.all()
+
+        symptoms_data = {}
+        for patient in all_patients:
+            highest_prediction = max(patient.predictions, key=lambda x: x[1], default=None)
+
+            if highest_prediction and highest_prediction[0].lower() in diseases:
+                symptoms_data[patient.id] = patient.symptoms
+
+        return Response({'symptoms': symptoms_data}, status=status.HTTP_200_OK)
+
+
+class GetSymptomsByPredictionId(APIView):
+    def get(self, request, *args, **kwargs):
+        prediction_id = request.GET.get('id')
+        try:
+            prediction = IllnessPrediction.objects.get(id=prediction_id)
+        except IllnessPrediction.DoesNotExist:
+            return JsonResponse({"error": "Prediction ID not found"}, status=404)
+
+        return Response({'symptoms': prediction.symptoms}, status=status.HTTP_200_OK)
+
+
+class GetDiseasesBySymptoms(APIView):
+    def get(self, request, *args, **kwargs):
+        query_params = request.GET
+        converted_params = {}
+
+        for symptom, value in query_params.items():
+            if not value:
+                continue
+            if value.lower() == "true":
+                converted_params[symptom] = 1
+            elif value.lower() == "false":
+                converted_params[symptom] = 0
+            else:
+                return JsonResponse({"error": f"Invalid value for symptom '{symptom}', expected true or false"}, status=400)
+
+        all_patients = IllnessPrediction.objects.all()
+        diseases_list = []
+
+        for patient in all_patients:
+            match = all(patient.symptoms.get(symptom) == value for symptom, value in converted_params.items())
+
+            if match:
+                top_disease = max(patient.predictions, key=lambda x: x[1], default=None)
+                if top_disease:
+                    diseases_list.append({
+                        "prediction_id": patient.id,
+                        "disease": top_disease[0]
+                    })
+
+        return Response({'diseases': diseases_list}, status=status.HTTP_200_OK)
+
+
+class GetPredictionById(APIView):
+    def get(self, request, prediction_id, *args, **kwargs):
+        prediction = get_object_or_404(IllnessPrediction, id=prediction_id)
         sorted_results = sorted(prediction.predictions, key=lambda x: x[1], reverse=True)
         symptoms = [symptom for symptom, value in prediction.symptoms.items() if value == 1]
 
-        return JsonResponse({"data": sorted_results, "symptoms": symptoms})
-    else:
-        return JsonResponse({"error": "Wrong ID"}, status=404)
+        return Response({"data": sorted_results, "symptoms": symptoms}, status=status.HTTP_200_OK)
 
 
-def get_diseases_by_prediction_id(request):
-    prediction_id = request.GET.get('id')
-    try:
-        prediction = IllnessPrediction.objects.get(id=prediction_id)
-        top_disease = max(prediction.predictions, key=lambda x: x[1], default=None)
-    except IllnessPrediction.DoesNotExist:
-        return JsonResponse({"error": "Prediction ID not found"}, status=404)
-    return JsonResponse({'disease': [top_disease]})
+class GetDiseasesByPredictionId(APIView):
+    def get(self, request, *args, **kwargs):
+        prediction_id = request.GET.get('id')
+        try:
+            prediction = IllnessPrediction.objects.get(id=prediction_id)
+            top_disease = max(prediction.predictions, key=lambda x: x[1], default=None)
+        except IllnessPrediction.DoesNotExist:
+            return JsonResponse({"error": "Prediction ID not found"}, status=404)
+
+        return Response({'disease': [top_disease]}, status=status.HTTP_200_OK)
