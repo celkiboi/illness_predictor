@@ -13,11 +13,13 @@ def predict(data):
 
     #url = 'http://1d0b4443-8610-4125-86cc-f3e226fb6c7b.westeurope.azurecontainer.io/score'
     #url = 'http://746ecc41-74c6-459f-b420-df039014d97b.westeurope.azurecontainer.io/score'
-    url = 'http://af285b00-8969-4255-8be3-5512191878de.westeurope.azurecontainer.io/score'
+    #url = 'http://af285b00-8969-4255-8be3-5512191878de.westeurope.azurecontainer.io/score'
+    url = 'http://8fd8b3e8-dba0-4199-bffc-70848a95f279.westeurope.azurecontainer.io/score'
     # Replace this with the primary/secondary key, AMLToken, or Microsoft Entra ID token for the endpoint
     #api_key = '77lvUQINoczP7IgepeQDwTnHl7HBMvsh'
     #api_key = 'vJlVyQdJfugPqbhzUyW4aLOaGwCgDfWb'
-    api_key = 'JDqh0QydJa4eA9DNsdcy6cYyrzxfrcaR'
+    #api_key = 'JDqh0QydJa4eA9DNsdcy6cYyrzxfrcaR'
+    api_key = 'ilwVpqMh3mCtlw7DdwKcIhBElAVainZ4'
     if not api_key:
         raise Exception("A key should be provided to invoke the endpoint")
 

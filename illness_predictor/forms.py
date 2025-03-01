@@ -16,6 +16,8 @@ class IllnessPredictorForm(forms.Form):
             ("movement_stiffness", "Movement stiffness"),
             ("neck_pain", "Neck pain"),
             ("painful_walking", "Painful walking"),
+            ("swelling_joints", "Swelling joints"),
+            ("stiff_neck", "Stiff neck"),
         ],
         "gastrointestinal": [
             ("polyuria", "Polyuria"),
@@ -49,6 +51,7 @@ class IllnessPredictorForm(forms.Form):
             ("mood_swings", "Mood swings"),
             ("restlessness", "Restlessness"),
             ("altered_sensorium", "Altered sensorium"),
+            ("lethargy", "Lethargy"),
         ],
         "cardiovascular": [
             ("palpitations", "Palpitations"),
@@ -58,6 +61,7 @@ class IllnessPredictorForm(forms.Form):
             ("cold_hands_and_feets", "Cold hands and feet"),
             ("irregular_sugar_level", "Irregular sugar level"),
             ("fluid_overload_1", "Fluid overload"),
+            ("weight_loss", "Weight loss"),
         ],
         "dermatological": [
             ("redness_of_eyes", "Redness of eyes"),
@@ -90,6 +94,8 @@ class IllnessPredictorForm(forms.Form):
             ("mucoid_sputum", "Mucoid sputum"),
             ("toxic_look_(typhos)", "Toxic look (typhos)"),
             ("internal_itching", "Internal itching"),
+            ("obesity", "Obesity"),
+            ("blurred_and_distorted_vision", "Blurred and distorted vision"),
         ],
         "other": [
             ("receiving_blood_transfusion", "Receiving blood transfusion"),
@@ -99,8 +105,10 @@ class IllnessPredictorForm(forms.Form):
             ("unsteadiness", "Unsteadiness"),
             ("bruising", "Bruising"),
             ("swelling_of_stomach", "Swelling of stomach"),
+            ("loss_of_balance", "Loss of balance"),
         ],
     }
+
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
